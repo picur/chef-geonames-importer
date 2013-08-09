@@ -24,4 +24,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #
 
-include_recipe 'geonames_importer::git'
+# install geonames_importer from git
+git node[:geonames_importer][:dir] do
+    repository node[:geonames_importer][:repository]
+    reference node[:geonames_importer][:branch]
+    action :sync
+    notifies :run, "execute[download_geonames_dumps]"
+end
