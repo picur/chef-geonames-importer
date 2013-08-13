@@ -1,4 +1,4 @@
-name             'chef-geonames-importer'
+name             'geonames-importer'
 maintainer       'Botond Dani'
 maintainer_email 'me@danibotond.ro'
 license          'MIT'
