@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: chef-geonames-importer
-# Recipe:: default
+# Cookbook Name:: geonames_importer
+# Recipe:: import
 #
 # Copyright 2013, Botond Dani
 #
@@ -25,25 +25,25 @@
 #
 
 # download geonames.org public data
-execute "download_geonames_dumps" do
-    command "/bin/bash geonames_importer.sh -a download-data"
-    cwd node[:geonames_importer][:dir]
+bash "download_geonames_dumps" do
+    code "geonames_importer.sh -a download-data"
+    cwd node['geonames_importer']['dir']
     user "root"
     group "root"
 end
 
 # create database if not exists
-execute "create_geonames_database" do
-    command "/bin/bash geonames_importer.sh -a create-db #{node[:geonames_importer][:connection]}"
-    cwd node[:geonames_importer][:dir]
+bash "create_geonames_database" do
+    code "geonames_importer.sh -a create-db #{node['geonames_importer']['connection']}"
+    cwd node['geonames_importer']['dir']
     user "root"
     group "root"
 end
 
 # import geonames.org downloaded data
-execute "import_geonames_dumps" do
-    command "/bin/bash geonames_importer.sh -a import-dumps #{node[:geonames_importer][:connection]}"
-    cwd node[:geonames_importer][:dir]
+bash "import_geonames_dumps" do
+    code "geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']}"
+    cwd node['geonames_importer']['dir']
     user "root"
     group "root"
 end
