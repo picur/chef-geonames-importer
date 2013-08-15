@@ -30,6 +30,7 @@ bash "download_geonames_dumps" do
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
+    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
 end
 
 # create database if not exists
@@ -38,12 +39,14 @@ bash "create_geonames_database" do
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
+    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
 end
 
 # import geonames.org downloaded data
 bash "import_geonames_dumps" do
-    code "geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']}"
+    code "geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']} && touch .imported"
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
+    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
 end
