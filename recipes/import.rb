@@ -30,7 +30,7 @@ execute "download_geonames_dumps" do
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
-    not_if { "test '10' = `find . -name '*.txt' | wc -l`" }
+    not_if "test '10' = `find . -name '*.txt' | wc -l`"
 end
 
 # create database if not exists
