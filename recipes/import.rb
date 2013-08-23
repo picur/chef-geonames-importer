@@ -25,17 +25,17 @@
 #
 
 # download geonames.org public data
-bash "download_geonames_dumps" do
-    code "geonames_importer.sh -a download-data"
+execute "download_geonames_dumps" do
+    command "/bin/bash geonames_importer.sh -a download-data"
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
-    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
+    not_if { "test '10' = `find . -name '*.txt' | wc -l`" }
 end
 
 # create database if not exists
-bash "create_geonames_database" do
-    code "geonames_importer.sh -a create-db #{node['geonames_importer']['connection']}"
+execute "create_geonames_database" do
+    command "/bin/bash geonames_importer.sh -a create-db #{node['geonames_importer']['connection']}"
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
@@ -43,8 +43,8 @@ bash "create_geonames_database" do
 end
 
 # import geonames.org downloaded data
-bash "import_geonames_dumps" do
-    code "geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']} && touch .imported"
+execute "import_geonames_dumps" do
+    command "/bin/bash geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']}; touch .imported"
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
