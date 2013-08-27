@@ -30,7 +30,8 @@ execute "download_geonames_dumps" do
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
-    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
+    action :run
+    not_if "/usr/bin/mysql -u#{node['geonames_importer']['mysql_user']} -p#{node['geonames_importer']['mysql_passwd']} #{node['geonames_importer']['mysql_dbname']} -e'SHOW TABLES;' | grep geoname" 
 end
 
 # create database if not exists
@@ -39,7 +40,8 @@ execute "create_geonames_database" do
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
-    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
+    action :run
+    not_if "/usr/bin/mysql -u#{node['geonames_importer']['mysql_user']} -p#{node['geonames_importer']['mysql_passwd']} #{node['geonames_importer']['mysql_dbname']} -e'SHOW TABLES;' | grep geoname" 
 end
 
 # import geonames.org downloaded data
@@ -48,5 +50,6 @@ execute "import_geonames_dumps" do
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
-    not_if { File.exists?("#{node[:geonames_importer][:dir]}/.imported") }
+    action :run
+    not_if "/usr/bin/mysql -u#{node['geonames_importer']['mysql_user']} -p#{node['geonames_importer']['mysql_passwd']} #{node['geonames_importer']['mysql_dbname']} -e'SHOW TABLES;' | grep geoname" 
 end
