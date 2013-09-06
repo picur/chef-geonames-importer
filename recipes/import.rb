@@ -46,10 +46,10 @@ end
 
 # import geonames.org downloaded data
 execute "import_geonames_dumps" do
-    command "/bin/bash geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']}; touch .imported"
+    command "/bin/bash geonames_importer.sh -a import-dumps #{node['geonames_importer']['connection']} && touch .imported"
     cwd node['geonames_importer']['dir']
     user "root"
     group "root"
     action :run
-    not_if "/usr/bin/mysql -u#{node['geonames_importer']['mysql_user']} -p#{node['geonames_importer']['mysql_passwd']} #{node['geonames_importer']['mysql_dbname']} -e'SHOW TABLES;' | grep geoname" 
+    not_if { ::File.exists?(".imported") }
 end
