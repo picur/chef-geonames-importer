@@ -51,5 +51,7 @@ execute "import_geonames_dumps" do
     user "root"
     group "root"
     action :run
-    not_if { ::File.exists?(".imported") }
+    not_if do 
+        ::File.exists?("#{node['geonames_importer']['dir']}/.imported") 
+    end
 end
